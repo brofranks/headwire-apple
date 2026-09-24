@@ -1,0 +1,5 @@
+root = true
+
+[*.sh]
+indent_style = tab
+space_redirects = true

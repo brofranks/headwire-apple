@@ -1,0 +1,12 @@
+build/
+Config/Developer.xcconfig
+*.provisionprofile
+*.mobileprovision
+*.p12
+*.p8
+*.pem
+xcuserdata/
+.DS_Store
+*.iml
+DerivedData/
+*.xcarchive

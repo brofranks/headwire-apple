@@ -1,0 +1,10 @@
+CODE_SIGN_ENTITLEMENTS = Config/Extension.entitlements
+INFOPLIST_FILE = Config/Extension-Info.plist
+INFOPLIST_KEY_CFBundleDisplayName = Headwire Network Extension
+// Installing a network system extension fails unless the extension bundle
+// carries this key.
+INFOPLIST_KEY_NSSystemExtensionUsageDescription = Headwire installs a network system extension to run its WireGuard tunnels.
+PRODUCT_BUNDLE_IDENTIFIER = $(BUNDLE_ID_PREFIX).extension
+PROVISIONING_PROFILE_SPECIFIER = $(PROFILE_EXTENSION)
+WRAPPER_NAME = $(PRODUCT_BUNDLE_IDENTIFIER).systemextension
+OTHER_LDFLAGS = $(inherited) $(GO_BRIDGE_LDFLAGS) -framework IOKit

@@ -1,0 +1,8 @@
+#include "iOS.xcconfig"
+
+INFOPLIST_FILE = Config/iOS-Extension-Info.plist
+INFOPLIST_KEY_CFBundleDisplayName = Headwire Network Extension
+PRODUCT_BUNDLE_IDENTIFIER = $(BUNDLE_ID_PREFIX).extension
+PROVISIONING_PROFILE_SPECIFIER = $(PROFILE_EXTENSION)
+SKIP_INSTALL = YES
+OTHER_LDFLAGS = $(inherited) $(GO_BRIDGE_LDFLAGS)

@@ -1,0 +1,8 @@
+// What the two iOS targets share, over Common.xcconfig's macOS defaults.
+SDKROOT = iphoneos
+SUPPORTED_PLATFORMS = iphoneos
+IPHONEOS_DEPLOYMENT_TARGET = 16.0
+TARGETED_DEVICE_FAMILY = 1,2
+// The same group as macOS. On iOS it is registered in the portal, and it is
+// also the keychain access group the app and the provider share.
+CODE_SIGN_ENTITLEMENTS = Config/Extension.entitlements

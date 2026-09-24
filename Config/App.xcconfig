@@ -1,0 +1,14 @@
+// The app links the Go bridge for HeadwireCLI, the command line it shares
+// with the Linux daemon. The engine runs only in the system extension.
+CODE_SIGN_ENTITLEMENTS = Config/App.entitlements
+PRODUCT_BUNDLE_IDENTIFIER = $(BUNDLE_ID_PREFIX)
+PROVISIONING_PROFILE_SPECIFIER = $(PROFILE_APP)
+// Assets/Headwire.icon, an Icon Composer bundle.
+ASSETCATALOG_COMPILER_APPICON_NAME = Headwire
+// A menu bar item, not a Dock application.
+INFOPLIST_KEY_LSUIElement = YES
+INFOPLIST_KEY_LSApplicationCategoryType = public.app-category.utilities
+// The explanation macOS shows when the app submits its
+// OSSystemExtensionRequest.
+INFOPLIST_KEY_NSSystemExtensionUsageDescription = Headwire installs a network system extension to run its WireGuard tunnels.
+OTHER_LDFLAGS = $(inherited) $(GO_BRIDGE_LDFLAGS) -framework IOKit

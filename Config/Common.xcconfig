@@ -1,0 +1,52 @@
+// Every build setting lives in these files, and the project file carries
+// none.
+
+// DEVELOPMENT_TEAM comes from the untracked Developer.xcconfig (see
+// Developer.xcconfig.example). Without it the project still builds with
+// CODE_SIGNING_ALLOWED=NO, which is enough to compile and run the unit tests.
+#include? "Developer.xcconfig"
+
+BUNDLE_ID_PREFIX = dev.brof.headwire
+// One `group.` value for both platforms: iOS accepts only that form.
+// NEMachServiceName must live inside it.
+APP_GROUP = group.$(BUNDLE_ID_PREFIX)
+
+// Development-signed builds take the plain value. Developer ID distribution
+// needs packet-tunnel-provider-systemextension and notarization instead.
+NE_PROVIDER_ENTITLEMENT = packet-tunnel-provider
+
+// Empty for automatic signing, which needs no profile specifier. sign.sh
+// installs the profile files it is given and passes their names here, with
+// Manual style and the matching identity.
+PROFILE_APP =
+PROFILE_EXTENSION =
+
+CODE_SIGN_STYLE = Automatic
+CODE_SIGN_IDENTITY = Apple Development
+ENABLE_HARDENED_RUNTIME = YES
+MACOSX_DEPLOYMENT_TARGET = 13.0
+SDKROOT = macosx
+// Swift 6 mode with warnings as errors: the actor isolation of this app's
+// NetworkExtension and AppKit callbacks is the part worth proving, and a
+// warning here is a data race later.
+SWIFT_VERSION = 6.0
+SWIFT_APPROACHABLE_CONCURRENCY = YES
+SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES
+SWIFT_TREAT_WARNINGS_AS_ERRORS = YES
+GCC_TREAT_WARNINGS_AS_ERRORS = YES
+// Xcode generates each bundle's Info.plist from these settings. Only the
+// NetworkExtension and NSExtension dictionaries, which have no build setting,
+// stay in a file of their own and are merged in.
+GENERATE_INFOPLIST_FILE = YES
+INFOPLIST_KEY_CFBundleDevelopmentRegion = en
+ALWAYS_SEARCH_USER_PATHS = NO
+// One real executable per bundle: the system extension is loaded by sysextd.
+ENABLE_DEBUG_DYLIB = NO
+
+// What a Go c-archive needs from the system. macOS adds IOKit.
+GO_BRIDGE_LDFLAGS = -lresolv -framework CoreFoundation -framework Security
+
+PRODUCT_NAME = $(TARGET_NAME)
+// build.sh passes the build number. This value serves a build from Xcode.
+CURRENT_PROJECT_VERSION = 1
+MARKETING_VERSION = 0.1.0
