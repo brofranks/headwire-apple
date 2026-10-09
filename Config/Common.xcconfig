@@ -49,4 +49,4 @@ GO_BRIDGE_LDFLAGS = -lresolv -framework CoreFoundation -framework Security
 PRODUCT_NAME = $(TARGET_NAME)
 // build.sh passes the build number. This value serves a build from Xcode.
 CURRENT_PROJECT_VERSION = 1
-MARKETING_VERSION = 0.1.0
+MARKETING_VERSION = 0.2.0
