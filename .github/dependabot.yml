@@ -6,6 +6,8 @@ updates:
       interval: weekly
     # Go marks tool dependencies as indirect requirements.
     allow:
+      - dependency-name: github.com/github/gh-actions-lock
+        dependency-type: all
       - dependency-name: github.com/rhysd/actionlint
         dependency-type: all
       - dependency-name: mvdan.cc/sh/v3
