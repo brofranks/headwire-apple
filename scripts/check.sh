@@ -5,10 +5,13 @@ cd "$(dirname "$0")/.."
 
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
-GOBIN="$work" go install mvdan.cc/sh/v3/cmd/shfmt@v3.14.1
-GOBIN="$work" go install github.com/rhysd/actionlint/cmd/actionlint@v1.7.12
+go -C tools/check mod tidy -diff
+go -C tools/check mod verify
+GOBIN="$work" go -C tools/check install \
+	mvdan.cc/sh/v3/cmd/shfmt \
+	github.com/rhysd/actionlint/cmd/actionlint
 python3 -m venv "$work/venv"
-"$work/venv/bin/pip" install -q shellcheck-py==0.11.0.1
+"$work/venv/bin/pip" install -q --require-hashes -r tools/check/requirements.txt
 # actionlint finds shellcheck here for workflow run blocks.
 PATH="$work/venv/bin:$PATH"
 

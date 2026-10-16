@@ -1,5 +1,19 @@
 version: 2
 updates:
+  - package-ecosystem: gomod
+    directory: /tools/check
+    schedule:
+      interval: weekly
+    # Go marks tool dependencies as indirect requirements.
+    allow:
+      - dependency-name: github.com/rhysd/actionlint
+        dependency-type: all
+      - dependency-name: mvdan.cc/sh/v3
+        dependency-type: all
+  - package-ecosystem: pip
+    directory: /tools/check
+    schedule:
+      interval: weekly
   - package-ecosystem: github-actions
     directory: /
     schedule:
