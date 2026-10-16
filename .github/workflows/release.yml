@@ -29,7 +29,7 @@ jobs:
       run:
         working-directory: headwire-apple
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           path: headwire-apple
           persist-credentials: false
@@ -48,18 +48,26 @@ jobs:
       - name: Read engine pin
         id: engine
         run: echo "ref=$(cat Config/Headwire.ref)" >> "$GITHUB_OUTPUT"
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           repository: ${{ github.repository_owner }}/headwire
           ref: ${{ steps.engine.outputs.ref }}
           path: headwire
           persist-credentials: false
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+      - uses: actions/setup-go@v7.0.0
         with:
           go-version-file: headwire/go.mod
           cache-dependency-path: |
             headwire/go.sum
             headwire-apple/tools/check/go.sum
+      # Optional, since the runner enforces the lockfile, but its check is
+      # looser: it accepted a locked commit that is an ancestor of its
+      # full-version tag. Verification requires the tag's exact commit.
+      - name: Verify action lockfile
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          "$(go -C tools/check tool -n gh-actions-lock)" --verify
       - name: Go development checks
         working-directory: headwire
         run: scripts/check.sh
@@ -83,20 +91,20 @@ jobs:
       run:
         working-directory: headwire-apple
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           path: headwire-apple
           persist-credentials: false
       - name: Read engine pin
         id: engine
         run: echo "ref=$(cat Config/Headwire.ref)" >> "$GITHUB_OUTPUT"
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           repository: ${{ github.repository_owner }}/headwire
           ref: ${{ steps.engine.outputs.ref }}
           path: headwire
           persist-credentials: false
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+      - uses: actions/setup-go@v7.0.0
         with:
           go-version-file: headwire/go.mod
           cache: false
@@ -132,7 +140,7 @@ jobs:
       - name: Remove signing inputs
         if: always()
         run: rm -rf "$RUNNER_TEMP/headwire-signing" Config/Developer.xcconfig
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: macos-release
           path: headwire-apple/build/releases/${{ github.ref_name }}/
@@ -149,7 +157,7 @@ jobs:
       id-token: write
       attestations: write
     steps:
-      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+      - uses: actions/download-artifact@v8.0.2
         with:
           name: macos-release
           path: release
@@ -157,7 +165,7 @@ jobs:
         working-directory: release
         run: sha256sum -c SHA256SUMS
       - name: Attest build provenance
-        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        uses: actions/attest@v4.2.2
         with:
           subject-checksums: release/SHA256SUMS
       - name: Create draft release
