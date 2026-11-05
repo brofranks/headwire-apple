@@ -19,7 +19,7 @@ require (
 	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
 	github.com/fatih/color v1.19.0 // indirect
 	github.com/github/actions-lockfile/go v0.0.6 // indirect
-	github.com/github/gh-actions-lock v0.4.0 // indirect
+	github.com/github/gh-actions-lock v0.4.1 // indirect
 	github.com/google/renameio/v2 v2.0.2 // indirect
 	github.com/henvic/httpretty v0.2.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
