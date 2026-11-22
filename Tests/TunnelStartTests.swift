@@ -90,6 +90,31 @@ final class TunnelStartTests: XCTestCase {
         XCTAssertEqual(it.monitoring, 0)
     }
 
+    func testRoutesRequireAnInterfaceAddressInTheirFamily() {
+        let v4 = #""ipv4Addresses":[{"address":"100.64.0.1","mask":"255.255.255.255","bits":32}]"#
+        let v6 = #""ipv6Addresses":[{"address":"fd42::1","bits":128}]"#
+        for (family, addresses, routes) in [
+            ("IPv4", v6, #""ipv4Addresses":[],"ipv4Routes":[{"address":"0.0.0.0","mask":"0.0.0.0","bits":0}]"#),
+            ("IPv4", v6, #""ipv4Routes":[{"address":"192.0.2.0","mask":"255.255.255.0","bits":24}]"#),
+            ("IPv6", v4, #""ipv6Addresses":[],"ipv6Routes":[{"address":"::","bits":0}]"#),
+            ("IPv6", v4, #""ipv6Routes":[{"address":"2001:db8::","bits":64}]"#),
+        ] {
+            let it = Fixture()
+            it.bridge.settings = #"{"mtu":1280,\#(addresses),\#(routes)}"#
+            it.start()
+            XCTAssertEqual(it.message(), "\(family) routes require an \(family) Address in [Interface]")
+            XCTAssertEqual(it.bridge.calls, ["prepare main", "stop 7"])
+            XCTAssertNil(it.tunnel.handle)
+        }
+        // Routes in a family with an address go on to be applied.
+        let it = Fixture()
+        it.bridge.settings =
+            #"{"mtu":1280,\#(v4),\#(v6),"ipv4Routes":[{"address":"0.0.0.0","mask":"0.0.0.0","bits":0}],"#
+            + #""ipv6Routes":[{"address":"::","bits":0}]}"#
+        it.start()
+        XCTAssertEqual(it.bridge.calls, ["prepare main", "monitor", "apply"])
+    }
+
     /// Every failure after preparation must release the engine's handle, the
     /// process's one session, and report once.
     func testFailuresAfterPreparationReleaseTheHandle() {

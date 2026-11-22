@@ -57,6 +57,15 @@ final class TunnelStart: @unchecked Sendable {
         } catch {
             return session.settingsApplied(Diagnostics.failure("settings: \(error)")) { _ in }
         }
+        // NetworkExtension can ignore routes in a family without a tunnel
+        // address and send matching traffic over the physical interface.
+        for (family, addresses, routes) in [
+            ("IPv4", settings.ipv4Addresses, settings.ipv4Routes),
+            ("IPv6", settings.ipv6Addresses, settings.ipv6Routes),
+        ] where (addresses ?? []).isEmpty && !(routes ?? []).isEmpty {
+            let error = Diagnostics.failure("\(family) routes require an \(family) Address in [Interface]")
+            return session.settingsApplied(error) { _ in }
+        }
         // Before the routes go in, so the engine knows the underlay when it
         // binds its first socket behind a default route.
         stopMonitor = host.monitor()
