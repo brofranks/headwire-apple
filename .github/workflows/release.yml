@@ -57,7 +57,7 @@ jobs:
           ref: ${{ steps.engine.outputs.ref }}
           path: headwire
           persist-credentials: false
-      - uses: actions/setup-go@v7.0.0
+      - uses: actions/setup-go@v7.1.0
         with:
           go-version-file: headwire/go.mod
           cache-dependency-path: |
@@ -107,7 +107,7 @@ jobs:
           ref: ${{ steps.engine.outputs.ref }}
           path: headwire
           persist-credentials: false
-      - uses: actions/setup-go@v7.0.0
+      - uses: actions/setup-go@v7.1.0
         with:
           go-version-file: headwire/go.mod
           cache: false
